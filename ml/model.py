@@ -1,8 +1,11 @@
+from sklearn.compose import make_column_selector, ColumnTransformer
+from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.metrics import fbeta_score, precision_score, recall_score
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import OneHotEncoder
 
 
-# Optional: implement hyperparameter tuning.
-def train_model(X_train, y_train):
+def train_model(X_train, y_train, cat_features):
     """
     Trains a machine learning model and returns it.
 
@@ -17,8 +20,15 @@ def train_model(X_train, y_train):
     model
         Trained machine learning model.
     """
-
-    pass
+    cat_column_selector = make_column_selector(f"^{'$|^'.join(cat_features)}$")
+    model = make_pipeline(
+        ColumnTransformer(
+            [("cat_features_ohe", OneHotEncoder(), cat_column_selector)]
+        ),
+        ExtraTreesClassifier()
+    )
+    model.fit(X_train, y_train)
+    return model
 
 
 def compute_model_metrics(y, preds):
