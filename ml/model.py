@@ -13,7 +13,7 @@ def train_model(X_train, y_train, cat_features):
         ColumnTransformer(
             [("cat_features_ohe", OneHotEncoder(), cat_column_selector)]
         ),
-        ExtraTreesClassifier()
+        ExtraTreesClassifier(random_state=42)
     )
     model.fit(X_train, y_train)
     return model
@@ -48,4 +48,4 @@ def compute_metrics_on_cat_slices(X, y, y_preds, cat_features):
                 'recall': recall,
                 'fscore': fscore
             })
-    return pd.DataFrame(results)
+    return pd.DataFrame(results).round(2)

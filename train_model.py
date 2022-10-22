@@ -15,7 +15,11 @@ pd.set_option('display.max_rows', None)
 
 X = pd.read_csv('data/census.csv')
 y = X.pop('salary').map({'<=50K': 0, '>50K': 1})
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.2)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=.2,
+    random_state=42
+)
 
 cat_features = [
     "workclass",
@@ -44,5 +48,10 @@ test_metrics_on_slices = compute_metrics_on_cat_slices(
     cat_features
 )
 logger.info(f"Test performance on slices:\n{test_metrics_on_slices}")
+test_metrics_on_slices.to_csv(
+    'slice_output.txt',
+    index=False,
+    sep=' '
+)
 
 dump(model, 'model/model.joblib')
