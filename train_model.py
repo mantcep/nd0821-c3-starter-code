@@ -5,15 +5,13 @@ from joblib import dump
 from loguru import logger
 from sklearn.model_selection import train_test_split
 
-pd.set_option('display.max_rows', None)
-
-
 from ml.model import (
     train_model,
     compute_model_metrics,
     compute_metrics_on_cat_slices
 )
 
+pd.set_option('display.max_rows', None)
 
 X = pd.read_csv('data/census.csv')
 y = X.pop('salary').map({'<=50K': 0, '>50K': 1})
