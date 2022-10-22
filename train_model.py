@@ -5,7 +5,14 @@ from joblib import dump
 from loguru import logger
 from sklearn.model_selection import train_test_split
 
-from ml.model import train_model, compute_model_metrics
+pd.set_option('display.max_rows', None)
+
+
+from ml.model import (
+    train_model,
+    compute_model_metrics,
+    compute_metrics_on_cat_slices
+)
 
 
 X = pd.read_csv('data/census.csv')
@@ -26,8 +33,18 @@ cat_features = [
 # Train and save a model.
 model = train_model(X_train, y_train, cat_features)
 y_test_pred = model.predict(X_test)
+
 test_metrics = compute_model_metrics(y_test, y_test_pred)
 logger.info(
     f"Test precision, recall, f1-score: {test_metrics}."
 )
+
+test_metrics_on_slices = compute_metrics_on_cat_slices(
+    X_test,
+    y_test,
+    y_test_pred,
+    cat_features
+)
+logger.info(f"Test performance on slices:\n{test_metrics_on_slices}")
+
 dump(model, 'model/model.joblib')
