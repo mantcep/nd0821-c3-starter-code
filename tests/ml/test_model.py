@@ -1,6 +1,8 @@
 from sklearn.pipeline import Pipeline
 from sklearn.utils.validation import check_is_fitted
 
+from ml.model import compute_model_metrics
+
 
 def test_trained_model_is_pipeline(model_trained_on_sample_data):
     """Test that trained model is a pipeline."""
@@ -10,3 +12,18 @@ def test_trained_model_is_pipeline(model_trained_on_sample_data):
 def test_trained_model_is_fitted(model_trained_on_sample_data):
     """Test that the trained model is fitted."""
     check_is_fitted(model_trained_on_sample_data)
+
+
+def test_compute_model_metrics():
+    """Test computation of model metrics."""
+    y_true = [0, 1, 1, 0, 1, 0, 1, 1, 0]
+    y_pred = [1, 0, 1, 0, 1, 0, 0, 1, 1]
+    expected_precision = 0.6
+    expected_recall = 0.6
+    expected_fbeta = 0.6
+
+    precision, recall, fbeta = compute_model_metrics(y_true, y_pred)
+
+    assert precision == expected_precision
+    assert recall == expected_recall
+    assert fbeta == expected_fbeta
