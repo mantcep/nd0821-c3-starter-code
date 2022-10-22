@@ -4,3 +4,7 @@ lint:
 
 test:
 	pytest
+
+train:
+	mkdir -p model
+	python train_model.py

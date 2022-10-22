@@ -26,7 +26,7 @@ def X_sample(data_sample):
 @pytest.fixture
 def y_sample(data_sample):
     """Fixture for small sample of y."""
-    return data_sample['salary']
+    return data_sample['salary'].map({'<=50K': 0, '>50K': 1})
 
 
 @pytest.fixture

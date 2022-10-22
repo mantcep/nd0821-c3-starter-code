@@ -1,28 +1,16 @@
 """Script to train machine learning model."""
 
 import pandas as pd
-from typing import List
+from joblib import dump
+from loguru import logger
 from sklearn.model_selection import train_test_split
 
-
-def process_data(
-    train: pd.DataFrame,
-    categorical_features: List[str],
-    label: str,
-    training: bool
-) -> tuple:
-    # Process the test data with the process_data function.
-    # TODO: Define output properly
-    pass
+from ml.model import train_model, compute_model_metrics
 
 
-# Add the necessary imports for the starter code.
-
-# Add code to load in the data.
-data = None
-
-# Optional enhancement, use K-fold cross validation instead of a train-test split.
-train, test = train_test_split(data, test_size=0.20)
+X = pd.read_csv('data/census.csv')
+y = X.pop('salary').map({'<=50K': 0, '>50K': 1})
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.2)
 
 cat_features = [
     "workclass",
@@ -34,8 +22,12 @@ cat_features = [
     "sex",
     "native-country",
 ]
-X_train, y_train, encoder, lb = process_data(
-    train, categorical_features=cat_features, label="salary", training=True
-)
 
 # Train and save a model.
+model = train_model(X_train, y_train, cat_features)
+y_test_pred = model.predict(X_test)
+test_metrics = compute_model_metrics(y_test, y_test_pred)
+logger.info(
+    f"Test precision, recall, f1-score: {test_metrics}."
+)
+dump(model, 'model/model.joblib')
