@@ -18,6 +18,18 @@ def data_sample(data):
 
 
 @pytest.fixture
+def X_sample(data_sample):
+    """Fixture for small sample of X."""
+    return data_sample.drop(columns='salary')
+
+
+@pytest.fixture
+def y_sample(data_sample):
+    """Fixture for small sample of y."""
+    return data_sample['salary']
+
+
+@pytest.fixture
 def cat_features():
     """Fixture for categorical features."""
     return [
@@ -33,9 +45,7 @@ def cat_features():
 
 
 @pytest.fixture
-def model_trained_on_sample_data(data_sample, cat_features):
+def model_trained_on_sample_data(X_sample, y_sample, cat_features):
     """Fixture for model trained on data sample."""
-    X = data_sample
-    y = data_sample.pop('salary')
 
-    return train_model(X, y, cat_features)
+    return train_model(X_sample, y_sample, cat_features)
