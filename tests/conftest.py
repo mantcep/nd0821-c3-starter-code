@@ -47,5 +47,4 @@ def cat_features():
 @pytest.fixture
 def model_trained_on_sample_data(X_sample, y_sample, cat_features):
     """Fixture for model trained on data sample."""
-
-    return train_model(X_sample, y_sample, cat_features)
+    return train_model(X_sample, y_sample, cat_features, n_iter=1)
