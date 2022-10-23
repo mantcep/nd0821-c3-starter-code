@@ -32,7 +32,7 @@ def test_infer_positive_pred():
     }
     r = client.post('/infer', json=data)
     assert r.status_code == 200
-    assert r.json() == 1
+    assert r.json()['prediction'] == 1
 
 
 def test_infer_negative_pred():
@@ -55,4 +55,4 @@ def test_infer_negative_pred():
     }
     r = client.post('/infer', json=data)
     assert r.status_code == 200
-    assert r.json() == 0
+    assert r.json()['prediction'] == 0

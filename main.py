@@ -1,4 +1,5 @@
 import pandas as pd
+from typing import Dict
 from joblib import load
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
@@ -35,5 +36,6 @@ async def welcome():
 
 
 @app.post("/infer")
-async def infer(input: Input) -> int:
-    return int(model.predict(pd.DataFrame([input.dict(by_alias=True)]))[0])
+async def infer(input: Input) -> Dict[str, int]:
+    input_df = pd.DataFrame([input.dict(by_alias=True)])
+    return {'prediction': int(model.predict(input_df)[0])}
