@@ -1,4 +1,5 @@
 import pandas as pd
+from loguru import logger
 from typing import Dict
 from joblib import load
 from fastapi import FastAPI
@@ -38,4 +39,7 @@ async def welcome():
 @app.post("/infer")
 async def infer(input: Input) -> Dict[str, int]:
     input_df = pd.DataFrame([input.dict(by_alias=True)])
-    return {'prediction': int(model.predict(input_df)[0])}
+    logger.info(f"Received input: {input_df}")
+    prediction = int(model.predict(input_df)[0])
+    logger.info(f"Prediction: {prediction}")
+    return {'prediction': prediction}
